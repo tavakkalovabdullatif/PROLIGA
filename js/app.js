@@ -1,6 +1,6 @@
-// TELEGRAM BOT MA'LUMOTLARI
-const BOTTOKEN = "AAEtXLOBgQuD0chv4xlgxxlD8ZOaZ1QrjyY";
-const CHATID = "8562841773";
+// 🔴 TELEGRAM BOT MA'LUMOTLARI
+const BOT_TOKEN = "8554912876:AAH-O98gL-hHB7GRsWjYwcYpel4OKM6XRGw";
+const CHAT_ID = "8074394669";
 
 // DOM elementlar
 const ism = document.getElementById("ism");
@@ -60,11 +60,11 @@ function sendToBot() {
 ✍️ Taklif:
 ${taklifMatni}`;
 
-  fetch(`https://api.telegram.org/bot${BOTTOKEN}/sendMessage`, {
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: CHATID,
+      chat_id: CHAT_ID,
       text: msg,
     }),
   })
