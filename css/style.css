@@ -37,7 +37,7 @@ section {
   grid-template-columns: 1.2fr 1fr;
   gap: 40px;
 }
-.hero h1 {
+.hero-h1 {
   font-size: 48px;
   background: linear-gradient(90deg, #22d3ee, #a855f7);
   -webkit-background-clip: text;
