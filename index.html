@@ -1,65 +1,50 @@
-<!-- Adhamjonov: -->
 <!DOCTYPE html>
 <html lang="uz">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ProLiga</title>
-
-    <link rel="stylesheet" href="./css/style.css" />
+    <title>PROLIGA</title>
   </head>
 
   <body>
-    <header>
-      <div class="logo">ProLiga</div>
-      <nav>
-        <a href="#">Biz haqimizda</a>
-
-        <a href="#">Loyihalar</a>
-        <a href="#">YANGILIKLAR</a>
-        <a href="#">CONTACT</a>
-      </nav>
-    </header>
-
-    <section class="hero">
-      <div>
-        <h1>PRO LEAGUE</h1>
-        <p>Cybersport va IT yo‘nalishlari uchun professional platforma.</p>
+    <div class="wrapper">
+      <div class="left">
+        <div class="logo">
+          <span class="pro">PRO</span>
+          <span class="liga">LIGA</span>
+        </div>
+        <div class="subtitle">Cybersport va IT platformasi</div>
       </div>
 
-      <!-- RO‘YXATGA OLISH -->
-      <div class="box">
-        <!-- STEP 1 -->
-        <div id="step1">
-          <h3>Ro‘yxatdan o‘tish</h3>
+      <div class="card">
+        <!-- PAGE 1 -->
+        <div id="page1">
+          <h2>Ro‘yxatdan o‘tish</h2>
           <input id="ism" placeholder="Ism" />
-          <input id="familya" placeholder="Familya" />
+          <input id="fam" placeholder="Familiya" />
           <input id="sinf" placeholder="Sinf" />
           <input id="harf" placeholder="Sinf harfi" />
-          <button onclick="nextStep()">Davom etish</button>
+          <button onclick="nextPage()">Davom etish</button>
         </div>
 
-        <!-- STEP 2 -->
-        <div id="step2" class="hidden">
-          <h3>Bo‘limni tanla</h3>
-          <div class="choice">
-            <button onclick="openSection('Cybersport')">🎮 Cybersport</button>
-            <button onclick="openSection('IT')">💻 IT</button>
+        <!-- PAGE 2 -->
+        <div id="page2" class="hide">
+          <h2>Bo‘lim tanlang</h2>
+          <div class="flex">
+            <div class="select" onclick="openForm('Cybersport')">
+              Cybersport
+            </div>
+            <div class="select" onclick="openForm('IT')">IT</div>
           </div>
         </div>
 
-        <!-- STEP 3 -->
-        <div id="step3" class="hidden">
-          <h3 id="sectionTitle"></h3>
-          <textarea
-            id="taklif"
-            rows="4"
-            placeholder="Taklifingizni yozing..."></textarea>
-          <button onclick="sendToBot()">Yuborish</button>
+        <!-- PAGE 3 -->
+        <div id="page3" class="hide">
+          <h2 id="bolimTitle"></h2>
+          <textarea id="taklif" placeholder="Taklif yozing..."></textarea>
+          <button id="sendBtn" onclick="send()">Jo‘natish</button>
         </div>
       </div>
-    </section>
-
-    <script src="./js/app.js"></script>
+    </div>
   </body>
 </html>

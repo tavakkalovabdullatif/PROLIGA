@@ -1,78 +1,64 @@
-// 🔴 TELEGRAM BOT MA'LUMOTLARI
+/* 🔴 TOKEN VA CHAT ID */
 const BOT_TOKEN = "8326245075:AAGaTnieB640tbfgv8s_0t0uXKUtRQ8dUjk";
-const CHAT_ID = "8326245075";
+const CHAT_ID = "8074394669";
 
-// DOM elementlar
-const ism = document.getElementById("ism");
-const familya = document.getElementById("familya");
-const sinf = document.getElementById("sinf");
-const harf = document.getElementById("harf");
-const taklif = document.getElementById("taklif");
-const step1 = document.getElementById("step1");
-const step2 = document.getElementById("step2");
-const step3 = document.getElementById("step3");
-const sectionTitle = document.getElementById("sectionTitle");
+let bolim = "";
 
-let user = {};
-let section = "";
+function nextPage() {
+  if (!ism.value || !fam.value || !sinf.value || !harf.value) {
+    alert("Hamma maydonni to‘ldir!");
+    return;
+  }
+  page1.classList.add("hide");
+  page2.classList.remove("hide");
+}
 
-// 1-qadam: Foydalanuvchi ma'lumotlarini tekshirish
-function nextStep() {
-  user.ism = ism.value.trim();
-  user.familya = familya.value.trim();
-  user.sinf = sinf.value.trim();
-  user.harf = harf.value.trim();
+function openForm(b) {
+  bolim = b;
+  bolimTitle.innerText = b + " bo‘limi";
+  page2.classList.add("hide");
+  page3.classList.remove("hide");
+}
 
-  if (!user.ism || !user.familya || !user.sinf || !user.harf) {
-    alert("Hamma joyni to‘ldiring!");
+function send() {
+  if (!taklif.value) {
+    alert("Taklif yoz!");
     return;
   }
 
-  step1.classList.add("hidden");
-  step2.classList.remove("hidden");
-}
+  sendBtn.disabled = true;
 
-// 2-qadam: Bo‘lim tanlash
-function openSection(sec) {
-  section = sec;
-  sectionTitle.innerText = `${sec} bo‘limi uchun taklif`;
-  step2.classList.add("hidden");
-  step3.classList.remove("hidden");
-}
-
-// 3-qadam: Taklifni yuborish
-function sendToBot() {
-  const taklifMatni = taklif.value.trim();
-
-  if (!taklifMatni) {
-    alert("Taklif yozing!");
-    return;
-  }
-
-  const msg = `📥 YANGI TAKLIF
-
-👤 Ism: ${user.ism}
-👤 Familya: ${user.familya}
-🏫 Sinf: ${user.sinf}-${user.harf}
-
-📂 Bo‘lim: ${section}
-
-✍️ Taklif:
-${taklifMatni}`;
+  const text = `📝 Yangi ariza
+👤 ${ism.value} ${fam.value}
+🏫 ${sinf.value}-${harf.value}
+📌 Bo‘lim: ${bolim}
+💬 Taklif: ${taklif.value}`;
 
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: CHAT_ID,
-      text: msg,
-    }),
+    body: JSON.stringify({ chat_id: CHAT_ID, text }),
   })
-    .then(() => {
-      alert("Yuborildi ✅");
-      location.reload();
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.ok) {
+        alert("✅ Ma’lumot qabul qilindi!");
+        // Sahifani tozalash
+        ism.value = "";
+        fam.value = "";
+        sinf.value = "";
+        harf.value = "";
+        taklif.value = "";
+        page3.classList.add("hide");
+        page1.classList.remove("hide");
+        sendBtn.disabled = false;
+      } else {
+        alert("Xatolik! Ma’lumot jo‘natilmadi.");
+        sendBtn.disabled = false;
+      }
     })
     .catch(() => {
-      alert("Xatolik yuz berdi ❌");
+      alert("Xatolik! Internet yoki bot tokenni tekshiring.");
+      sendBtn.disabled = false;
     });
 }
