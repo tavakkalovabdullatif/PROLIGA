@@ -30,13 +30,13 @@ body {
   font-weight: 900;
   line-height: 1;
 }
-.logo .pro {
+.logo-pro {
   display: block;
   background: linear-gradient(90deg, #22d3ee, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.logo .liga {
+.logo-liga {
   display: block;
   background: linear-gradient(90deg, #8b5cf6, #ec4899);
   -webkit-background-clip: text;
