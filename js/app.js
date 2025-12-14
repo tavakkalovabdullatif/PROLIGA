@@ -1,6 +1,6 @@
 // 🔴 TELEGRAM BOT MA'LUMOTLARI
-const BOT_TOKEN = "8554912876:AAH-O98gL-hHB7GRsWjYwcYpel4OKM6XRGw";
-const CHAT_ID = "8074394669";
+const BOT_TOKEN = "AAF9VTswEGfgZBH0tG0qQw1TUKOa0T7JYu";
+const CHAT_ID = "7013444749";
 
 // DOM elementlar
 const ism = document.getElementById("ism");
