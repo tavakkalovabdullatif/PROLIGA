@@ -1,15 +1,18 @@
-/* ================== SOZLAMALAR ================== */
-const BOT_TOKEN = "YOUR_BOT_TOKEN"; // ⚠️ frontendda haqiqiy token qo‘ymang
-const CHAT_ID = "YOUR_CHAT_ID";
-
-/* ================== O‘ZGARUVCHILAR ================== */
+const ADMIN_PASSWORD = "Otabek2215";
 let users = JSON.parse(localStorage.getItem("users") || "{}");
-let currentAction = "login";
 let currentUser = null;
 
-/* ================== MODAL ================== */
+// Sahifa yuklanganda foydalanuvchini tekshirish
+window.onload = function () {
+  const savedUser = localStorage.getItem("currentUser");
+  if (savedUser) {
+    currentUser = savedUser;
+    showWelcome(currentUser);
+  }
+};
+
+// LOGIN / REGISTER
 function openModal(action) {
-  currentAction = action;
   document.getElementById("modal-bg").style.display = "flex";
   document.getElementById("modal-title").innerText =
     action === "login" ? "Kirish" : "Ro‘yxatdan o‘tish";
@@ -18,153 +21,131 @@ function openModal(action) {
   document.getElementById("password").value = "";
 }
 
-/* ================== LOGIN / REGISTER ================== */
 function submitForm() {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-  const msg = document.getElementById("modal-msg");
-
-  if (username === "" || password === "") {
-    msg.style.color = "#f55";
-    msg.innerText = "Iltimos, barcha maydonlarni to‘ldiring!";
+  if (!username || !password) {
+    document.getElementById("modal-msg").innerText =
+      "Iltimos, barcha maydonlarni to‘ldiring!";
     return;
   }
 
-  if (currentAction === "register") {
-    if (users[username]) {
-      msg.style.color = "#f55";
-      msg.innerText = "Foydalanuvchi allaqachon mavjud!";
-    } else {
-      users[username] = password;
-      localStorage.setItem("users", JSON.stringify(users));
-      currentUser = username;
-      showWelcome(username);
-      sendToBot(username, password);
-      msg.style.color = "lime";
-      msg.innerText = "Ro‘yxatdan o‘tish muvaffaqiyatli!";
-      setTimeout(() => {
-        document.getElementById("modal-bg").style.display = "none";
-      }, 500);
-    }
-  } else {
-    if (users[username] && users[username] === password) {
-      currentUser = username;
-      showWelcome(username);
-      document.getElementById("modal-bg").style.display = "none";
-    } else {
-      msg.style.color = "#f55";
-      msg.innerText = "Ism yoki parol xato!";
-    }
-  }
+  users[username] = password;
+  localStorage.setItem("users", JSON.stringify(users));
+  currentUser = username;
+  localStorage.setItem("currentUser", currentUser);
+  showWelcome(username);
+  document.getElementById("modal-bg").style.display = "none";
 }
 
-/* ================== WELCOME ================== */
 function showWelcome(username) {
   document.getElementById("menu").style.display = "none";
   const welcome = document.getElementById("welcome-msg");
-  const confirmBtn = document.getElementById("confirm-class-btn");
-
   welcome.style.display = "block";
-  const userClass = localStorage.getItem("userClass_" + username);
-
-  if (userClass) {
-    welcome.innerText = `Xush kelibsiz, ${username} (${userClass})`;
-    confirmBtn.style.display = "none";
-  } else {
-    welcome.innerText = `Xush kelibsiz, ${username}`;
-    confirmBtn.style.display = "inline-block";
-  }
+  const userClass = localStorage.getItem("userClass_" + username) || "";
+  welcome.innerText =
+    "Xush kelibsiz, " + username + (userClass ? " (" + userClass + ")" : "");
+  document.getElementById("confirm-class-btn").style.display = userClass
+    ? "none"
+    : "inline-block";
 }
 
-/* ================== CLASS TASDIQLASH ================== */
-function confirmClass() {
-  if (!currentUser) return;
-
-  const className = prompt("Sinfingizni kiriting (masalan: 10A):");
-  if (className && className.trim() !== "") {
-    localStorage.setItem("userClass_" + currentUser, className.trim());
-    showWelcome(currentUser);
-    alert("Sinf tasdiqlandi: " + className);
-    sendToBot(currentUser, users[currentUser], className.trim());
-  }
+// Sinfni chiroyli modal orqali tasdiqlash
+function openClassModal() {
+  document.getElementById("class-modal-bg").style.display = "flex";
 }
-
-/* ================== TELEGRAMGA YUBORISH ================== */
-function sendToBot(username, password, userClass = null) {
-  let text = `Yangi foydalanuvchi:
-Ism: ${username}
-Parol: ${password}`;
-
-  if (userClass) {
-    text += `\nSinf: ${userClass}`;
-  }
-
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: CHAT_ID,
-      text: text,
-    }),
-  })
-    .then(() => console.log("Botga yuborildi"))
-    .catch((err) => console.error(err));
-}
-
-/* ================== BO‘LIMLAR ================== */
-function selectSection(section) {
-  const mainSection = document.getElementById("main-section");
-  const newsSection = document.getElementById("news-section");
-
-  if (section === "news") {
-    mainSection.style.display = "none";
-    newsSection.style.display = "block";
+function confirmClassModal() {
+  const num = document.getElementById("class-num").value.trim();
+  const letter = document
+    .getElementById("class-letter")
+    .value.trim()
+    .toUpperCase();
+  if (!num || !letter) {
+    alert("Iltimos, sinf raqami va harfini kiriting");
     return;
   }
-
-  const itCard = document.getElementById("it-card");
-  const cyberCard = document.getElementById("cyber-card");
-  const newsCard = document.getElementById("news-card");
-
-  itCard.style.opacity = "1";
-  cyberCard.style.opacity = "1";
-  newsCard.style.opacity = "1";
-
-  itCard.style.pointerEvents = "auto";
-  cyberCard.style.pointerEvents = "auto";
-  newsCard.style.pointerEvents = "auto";
-
-  if (section === "it") {
-    cyberCard.style.opacity = "0.5";
-    newsCard.style.opacity = "0.5";
-    cyberCard.style.pointerEvents = "none";
-    newsCard.style.pointerEvents = "none";
-    alert("IT bo‘limiga o‘tildi");
-  }
-
-  if (section === "cyber") {
-    itCard.style.opacity = "0.5";
-    newsCard.style.opacity = "0.5";
-    itCard.style.pointerEvents = "none";
-    newsCard.style.pointerEvents = "none";
-    alert("Cybersport bo‘limiga o‘tildi");
-  }
+  const fullClass = num + letter;
+  localStorage.setItem("userClass_" + currentUser, fullClass);
+  document.getElementById("class-modal-bg").style.display = "none";
+  showWelcome(currentUser);
 }
 
-function backToMain() {
+// Yangiliklar
+function openNews() {
+  document.getElementById("main-section").style.display = "none";
+  document.getElementById("news-section").style.display = "block";
+  loadNews();
+}
+function backHome() {
   document.getElementById("news-section").style.display = "none";
   document.getElementById("main-section").style.display = "block";
 }
+function adminCheck() {
+  const pass = prompt("Admin parolni kiriting:");
+  if (pass === ADMIN_PASSWORD) {
+    document.getElementById("news-modal-bg").style.display = "flex";
+  } else {
+    alert("❌ Noto‘g‘ri parol!");
+  }
+}
+function addNews() {
+  const text = document.getElementById("news-text").value.trim();
+  const img = document.getElementById("news-img").value.trim();
+  const video = document.getElementById("news-video").value.trim();
+  if (!text && !img && !video) {
+    alert("Kamida bitta maydon to‘ldiring!");
+    return;
+  }
+  let news = JSON.parse(localStorage.getItem("news") || "[]");
+  news.unshift({ text, img, video });
+  localStorage.setItem("news", JSON.stringify(news));
+  document.getElementById("news-modal-bg").style.display = "none";
+  document.getElementById("news-text").value = "";
+  document.getElementById("news-img").value = "";
+  document.getElementById("news-video").value = "";
+  loadNews();
+}
+function loadNews() {
+  const list = document.getElementById("news-list");
+  list.innerHTML = "";
+  let news = JSON.parse(localStorage.getItem("news") || "[]");
+  if (news.length === 0) {
+    list.innerHTML = "<p>Hozircha yangilik kiritilmadi</p>";
+    return;
+  }
+  news.forEach((n) => {
+    const div = document.createElement("div");
+    div.className = "news-item";
+    div.innerHTML = `<p>${n.text || ""}</p>${
+      n.img ? `<img src="${n.img}">` : ""
+    }${n.video ? `<video controls src="${n.video}"></video>` : ""}`;
+    list.appendChild(div);
+  });
+}
 
-/* ================== MODAL TASHQARISIGA BOSISH ================== */
-document.getElementById("modal-bg").addEventListener("click", function (e) {
-  if (e.target === this) this.style.display = "none";
+// Modalni click bilan yopish
+document.getElementById("modal-bg").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = "none";
+});
+document.getElementById("class-modal-bg").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = "none";
+});
+document.getElementById("news-modal-bg").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = "none";
 });
 
-/* ================== OXIRGI USER ================== */
-const savedUsers = Object.keys(users);
-if (savedUsers.length > 0) {
-  const lastUser = savedUsers[savedUsers.length - 1];
-  currentUser = lastUser;
-  showWelcome(lastUser);
+// ❄️ Qor animatsiyasi
+const snowCount = 50;
+for (let i = 0; i < snowCount; i++) {
+  const snow = document.createElement("div");
+  snow.className = "snowflake";
+  snow.style.left = Math.random() * window.innerWidth + "px";
+  snow.style.width = snow.style.height = 5 + Math.random() * 5 + "px";
+  snow.style.opacity = 0.5 + Math.random() * 0.5;
+  snow.style.animationDuration = 5 + Math.random() * 5 + "s";
+  snow.style.animationName = "fall";
+  document.body.appendChild(snow);
 }
+const style = document.createElement("style");
+style.innerHTML = `@keyframes fall {0% {transform: translateY(-10px);}100% {transform: translateY(110vh);}}.snowflake {animation-timing-function: linear; animation-iteration-count: infinite;}`;
+document.head.appendChild(style);

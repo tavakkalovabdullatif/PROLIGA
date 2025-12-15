@@ -18,9 +18,8 @@
         style="display: flex; align-items: center; gap: 10px">
         <div
           id="welcome-msg"
-          s
-          tyle="display:none;font-size:16px;color:#0ff;"></div>
-        <button id="confirm-class-btn" onclick="confirmClass()">
+          style="display: none; font-size: 16px; color: #0ff"></div>
+        <button id="confirm-class-btn" onclick="openClassModal()">
           Sinfni tasdiqlash
         </button>
       </div>
@@ -34,46 +33,33 @@
     <div class="section" id="main-section">
       <h3>Bo‘limlar</h3>
       <div class="cards">
-        <div class="card it" id="it-card" onclick="selectSection('it')">
+        <div class="card it" onclick="alert('IT bo‘limi')">
           <img
-            src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=60"
-            alt="IT" />
+            src="https://images.unsplash.com/photo-1518770660439-4636190af475" />
           <h4>IT BO‘LIMI</h4>
         </div>
-        <div
-          class="card cyber"
-          id="cyber-card"
-          onclick="selectSection('cyber')">
+        <div class="card cyber" onclick="alert('Cybersport bo‘limi')">
           <img
-            src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=60"
-            alt="Cyber" />
+            src="https://images.unsplash.com/photo-1542751371-adc38448a05e" />
           <h4>CYBERSPORT</h4>
         </div>
-        <div class="card news" id="news-card" onclick="selectSection('news')">
+        <div class="card news" onclick="openNews()">
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=500&q=60"
-            alt="Yangiliklar" />
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" />
           <h4>YANGILIKLAR</h4>
         </div>
       </div>
     </div>
 
     <div id="news-section">
-      <h2>Hozircha yangilik kiritilmadi</h2>
-      <img
-        src="https://images.unsplash.com/photo-1581092795360-0b5a88a0d0c0?auto=format&fit=crop&w=400&q=60"
-        alt="Yangiliklar" />
-      <br />
-      <button id="back-btn" onclick="backToMain()">Ortga</button>
+      <button id="add-news-btn" onclick="adminCheck()">
+        Yangilik qo‘shish (Admin)
+      </button>
+      <div id="news-list"></div>
+      <button id="back-btn" onclick="backHome()">Ortga</button>
     </div>
 
-    <footer>
-      <div>Main</div>
-      <div>IT</div>
-      <div>Cyber</div>
-      <div>Profile</div>
-    </footer>
-
+    <!-- Login/Register Modal -->
     <div class="modal-bg" id="modal-bg">
       <div class="modal" id="modal">
         <h3 id="modal-title">Kirish</h3>
@@ -83,6 +69,34 @@
         <p id="modal-msg"></p>
       </div>
     </div>
+
+    <!-- Class Modal -->
+    <div class="modal-bg" id="class-modal-bg">
+      <div class="modal">
+        <h3>Sinfni kiriting</h3>
+        <input
+          type="text"
+          id="class-num"
+          placeholder="Sinf raqami (masalan 10)" />
+        <input
+          type="text"
+          id="class-letter"
+          placeholder="Sinf harfi (masalan A)" />
+        <button onclick="confirmClassModal()">Tasdiqlash</button>
+      </div>
+    </div>
+
+    <!-- News Modal -->
+    <div class="modal-bg" id="news-modal-bg">
+      <div class="modal">
+        <h3>Yangilik qo‘shish</h3>
+        <textarea id="news-text" placeholder="Matn"></textarea>
+        <input type="text" id="news-img" placeholder="Rasm URL" />
+        <input type="text" id="news-video" placeholder="Video URL" />
+        <button onclick="addNews()">Qo‘shish</button>
+      </div>
+    </div>
+
     <script src="./js/app.js"></script>
   </body>
 </html>
